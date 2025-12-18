@@ -1,0 +1,177 @@
+# 🚀 QUICK START - JHC Broadcast System
+
+## 30 Seconds Setup
+
+```bash
+# Terminal 1:
+cd backend
+npm start
+
+# Terminal 2 (Optional, to watch for changes):
+cd backend
+npm run dev
+```
+
+**✅ Server ready at: http://localhost:3000**
+
+---
+
+## 1 Minute Testing
+
+### Browser Tabs/Devices:
+```
+Tab 1: http://localhost/aa_jhc/frontend/code-warning.html
+Tab 2: http://localhost/aa_jhc/frontend/code-warning.html
+Tab 3: http://localhost/aa_jhc/frontend/code-warning.html
+```
+
+Each tab shows: `✅ Connected to broadcast server`
+
+---
+
+## 2 Minute First Broadcast
+
+### Test Announcement:
+```
+Tab 1 (Broadcaster):
+1. Click "Rekam" → speak → "Stop" → "Kirim"
+2. See: "✅ Pengumuman dikirim ke semua display!"
+
+Tab 2,3 (Receiver):
+- 🔊 Audio automatically plays!
+- 📢 Same announcement heard everywhere
+```
+
+### Test Code:
+```
+Tab 1 (Broadcaster):
+1. Click "CODE BLUE" → Select "CATHLAB"
+2. See: "🚨 CODE BLUE dipanggil di CATHLAB!"
+
+Tab 2,3 (Receiver):
+- 🚨 Audio automatically plays 2x!
+```
+
+---
+
+## Command Reference
+
+| Command | Purpose | Terminal |
+|---------|---------|----------|
+| `npm install` | Install dependencies | backend (once) |
+| `npm start` | Run server (production) | backend (always run) |
+| `npm run dev` | Run server (watch mode) | backend (optional) |
+
+---
+
+## File Locations
+
+| File | Purpose | Location |
+|------|---------|----------|
+| Server | WebSocket backend | `backend/server.js` |
+| Config | Dependencies | `backend/package.json` |
+| Client | Socket.io client | `frontend/broadcast.js` ✨ NEW |
+| UI | Code warning page | `frontend/code-warning.html` |
+| Logic | Main functions | `frontend/script.js` |
+| Styles | CSS | `frontend/styles.css` |
+| Docs | Full guide | Root folder (`*.md`) |
+
+---
+
+## Browser Console Output
+
+### When Working ✅:
+```
+✅ Connected to broadcast server
+📢 Menerima broadcast announcement
+🔊 Playing broadcast announcement
+```
+
+### When Error ❌:
+```
+Connection error: ...
+(check if server is running)
+```
+
+---
+
+## Common Issues
+
+| Problem | Fix |
+|---------|-----|
+| Server won't start | Confirm: `cd backend` then `npm start` |
+| Port 3000 in use | Kill old process or use different port |
+| Audio not heard | Check volume, refresh tab, check console |
+| Not connecting | Verify `http://localhost:3000` is accessible |
+
+---
+
+## What It Does
+
+### User Presses "Kirim" (Send)
+```
+1. Client sends audio blob to server
+2. Server broadcasts to ALL connected devices
+3. Every device automatically plays audio
+4. No action needed on receiver side
+```
+
+### User Clicks CODE Button
+```
+1. User selects location or starts broadcast
+2. Client sends code name to server
+3. Server broadcasts to ALL connected devices
+4. Every device automatically plays code audio
+5. No action needed on receiver side
+```
+
+---
+
+## Architecture
+
+```
+                    ┌─────────────┐
+                    │  Server     │
+                    │  :3000      │
+                    │  Socket.io  │
+                    └──────┬──────┘
+                           │
+            ┌──────────────┼──────────────┐
+            │              │              │
+        ┌───▼───┐      ┌───▼───┐      ┌──▼────┐
+        │Device1│      │Device2│      │DeviceN│
+        │▓▓▓▓▓▓│      │▓▓▓▓▓▓│      │▓▓▓▓▓▓│
+        │ Play  │      │ Play  │      │ Play  │
+        └───────┘      └───────┘      └───────┘
+           ↑              ↑              ↑
+        (Broadcast from any device)
+```
+
+---
+
+## Deploy Checklist
+
+- [ ] Server running in backend terminal
+- [ ] Open code-warning.html in browser
+- [ ] See "Connected to broadcast server" message
+- [ ] Test recording → kirim → auto play in all tabs
+- [ ] Test code button → auto play in all tabs
+- [ ] Check no error in console (F12)
+- [ ] ✅ Ready to use!
+
+---
+
+## Important Notes
+
+⚠️ **Server must be running** for broadcast to work
+✅ Announcement and Codes auto-broadcast to ALL devices
+✅ No manual action needed on receiver side
+✅ Works simultaneously on unlimited devices
+
+---
+
+**Version:** 1.0.0
+**Status:** ✅ Ready to Use
+**Updated:** Dec 18, 2025
+
+For detailed guide: see `BROADCAST_SETUP.md` or `SYSTEM_ARCHITECTURE.md`

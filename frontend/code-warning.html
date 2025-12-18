@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Warning - JHC Platform</title>
+    <link rel="icon" type="image/png" href="assets/images/logo-IT.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.socket.io/4.7.2/socket.io.js"></script>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="logo">
+          <i class="fas fa-hospital"></i>
+          <span>All Aplication JHC</span>
+        </div>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="index.html#features">Fitur</a>
+          <a href="index.html#contact">Kontak</a>
+          <button class="search-toggle" onclick="toggleSearch()">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <h2>CODE WARNING RS JHC TASIKMALAYA</h2>
+        <p>Peringatan Code - Audio play untuk code-code di rumah sakit</p>
+      </div>
+    </section>
+    <!-- Code Warning Section -->
+    <section class="code-warning" id="code-warning">
+      <div class="container">
+        <div class="warning-content">
+          <!-- Pengumuman Langsung -->
+          <div class="warning-card">
+            <h3>Pengumuman Langsung</h3>
+            <p>Rekam dan kirim pengumuman suara ke semua display.</p>
+            <div class="button-group">
+              <button
+                class="btn-warning btn-primary"
+                onclick="startRecording()"
+              >
+                <i class="fas fa-microphone"></i> Rekam
+              </button>
+              <button
+                class="btn-warning btn-warning-stop"
+                onclick="stopRecording()"
+              >
+                <i class="fas fa-stop"></i> Stop
+              </button>
+              <button
+                class="btn-warning btn-warning-listen"
+                onclick="listenRecording()"
+              >
+                <i class="fas fa-headphones"></i> Dengar
+              </button>
+              <button
+                class="btn-warning btn-warning-send"
+                onclick="sendRecording()"
+              >
+                <i class="fas fa-paper-plane"></i> Kirim
+              </button>
+            </div>
+            <p class="hint">Tekan "Rekam" untuk memulai.</p>
+            <div
+              id="microphonePermissionGuide"
+              class="permission-guide"
+              style="display: none"
+            >
+              <p><strong>📋 Troubleshooting Microphone:</strong></p>
+              <ol>
+                <li>
+                  <strong>Chrome/Edge:</strong> Klik ikon 🔒 di address bar →
+                  Izinkan microphone → Refresh
+                </li>
+                <li>
+                  <strong>Firefox:</strong> Klik ikon 🔒 di address bar →
+                  Izinkan microphone → Refresh
+                </li>
+                <li>Pastikan izin sudah diberikan (setting browser)</li>
+                <li>
+                  Tutup aplikasi lain yang menggunakan microphone (Zoom, Skype,
+                  dll)
+                </li>
+                <li>Coba refresh halaman atau restart browser</li>
+              </ol>
+            </div>
+
+            <!-- Recording Result -->
+            <div
+              id="recordingResult"
+              class="recording-result"
+              style="display: none"
+            >
+              <div class="result-header">
+                <i class="fas fa-check-circle"></i>
+                <span>Rekaman Berhasil</span>
+              </div>
+              <div class="result-details">
+                <div class="result-item">
+                  <span class="result-label">Status:</span>
+                  <span class="result-value" id="resultStatus"
+                    >Siap untuk didengar dan dikirim</span
+                  >
+                </div>
+                <div class="result-item">
+                  <span class="result-label">Durasi:</span>
+                  <span class="result-value" id="resultDuration">--:--</span>
+                </div>
+                <div class="result-item">
+                  <span class="result-label">Ukuran File:</span>
+                  <span class="result-value" id="resultSize">0 KB</span>
+                </div>
+                <div class="result-item">
+                  <span class="result-label">Format:</span>
+                  <span class="result-value" id="resultFormat">WebM Audio</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panggilan Code Blue -->
+          <div class="warning-card">
+            <h3>Panggilan Code</h3>
+            <p>Tekan tombol di bawah untuk mengaktifkan Code di rumah sakit</p>
+            <div class="code-blue-grid">
+              <button
+                class="btn-code-blue code-blue"
+                onclick="openCodeBlueModal()"
+              >
+                CODE BLUE
+              </button>
+              <button
+                class="btn-code-blue code-green"
+                onclick="triggerCodeBlue('CODE GREEN')"
+              >
+                CODE GREEN
+              </button>
+              <button
+                class="btn-code-blue code-red"
+                onclick="triggerCodeBlue('CODE RED')"
+              >
+                CODE RED
+              </button>
+              <button
+                class="btn-code-blue code-yellow"
+                onclick="triggerCodeBlue('CODE YELLOW')"
+              >
+                CODE YELLOW
+              </button>
+              <button
+                class="btn-code-blue code-white"
+                onclick="triggerCodeBlue('CODE WHITE')"
+              >
+                CODE WHITE
+              </button>
+              <button
+                class="btn-code-blue code-black"
+                onclick="triggerCodeBlue('CODE BLACK')"
+              >
+                CODE BLACK
+              </button>
+              <button
+                class="btn-code-blue code-purple"
+                onclick="triggerCodeBlue('CODE PURPLE')"
+              >
+                CODE PURPLE
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal Code Blue Lokasi -->
+    <div id="codeBlueModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Pilih Lokasi Code Blue</h2>
+          <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <p class="modal-subtitle">
+          Tekan tombol di bawah untuk mengaktifkan Code Blue di ruangan yang
+          sesuai.
+        </p>
+        <div class="modal-locations-grid">
+          <button
+            class="btn-location"
+            onclick="triggerCodeBlueLocation('CATHLAB')"
+          >
+            CATHLAB
+          </button>
+          <button class="btn-location" onclick="triggerCodeBlueLocation('HCU')">
+            HCU
+          </button>
+          <button class="btn-location" onclick="triggerCodeBlueLocation('ICU')">
+            ICU
+          </button>
+          <button class="btn-location" onclick="triggerCodeBlueLocation('IGD')">
+            IGD
+          </button>
+          <button
+            class="btn-location"
+            onclick="triggerCodeBlueLocation('POLI')"
+          >
+            POLI
+          </button>
+          <button
+            class="btn-location"
+            onclick="triggerCodeBlueLocation('RADIOLOGI')"
+          >
+            RADIOLOGI
+          </button>
+          <button
+            class="btn-location"
+            onclick="triggerCodeBlueLocation('RANAP STANDAR')"
+          >
+            RANAP STANDAR
+          </button>
+          <button
+            class="btn-location"
+            onclick="triggerCodeBlueLocation('RANAP VIP')"
+          >
+            RANAP VIP
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Audio Control -->
+    <div id="audioControlModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="audio-modal-title">Kontrol Audio</h2>
+          <button class="modal-close" onclick="closeAudioControlModal()">
+            &times;
+          </button>
+        </div>
+        <p class="modal-subtitle">
+          Gunakan tombol di bawah untuk mengontrol audio.
+        </p>
+        <div class="audio-control-buttons">
+          <button class="btn-audio-play" onclick="handlePlayAudio()">
+            <i class="fas fa-play"></i> Play (Loop)
+          </button>
+          <button class="btn-audio-stop" onclick="handleStopAudio()">
+            <i class="fas fa-stop"></i> Stop
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4>Tentang JHC</h4>
+            <p>
+              Platform manajemen terintegrasi untuk meningkatkan efisiensi
+              operasional rumah sakit.
+            </p>
+          </div>
+          <div class="footer-section">
+            <h4>Kontak</h4>
+            <p>Email: info@jhc.com</p>
+            <p>Telepon: (0274) XXX-XXXX</p>
+          </div>
+          <div class="footer-section">
+            <h4>Media Sosial</h4>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 JHC - Platform Manajemen Terintegrasi. All rights
+            reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Debug Console -->
+    <div
+      id="debugConsole"
+      style="
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 400px;
+        height: 200px;
+        background: #1a1a1a;
+        color: #0f0;
+        border: 2px solid #0f0;
+        border-radius: 0;
+        overflow-y: auto;
+        font-family: monospace;
+        font-size: 11px;
+        padding: 10px;
+        z-index: 9999;
+        display: none;
+      "
+    >
+      <div style="color: #ff0; margin-bottom: 5px">
+        <strong>DEBUG CONSOLE</strong>
+        <button
+          onclick="document.getElementById('debugConsole').style.display='none'"
+          style="
+            float: right;
+            background: #ff0;
+            color: #000;
+            border: none;
+            padding: 2px 5px;
+            cursor: pointer;
+          "
+        >
+          ✕
+        </button>
+      </div>
+      <div id="debugOutput"></div>
+    </div>
+
+    <script>
+      // Simple debug console
+      const debugOutput = document.getElementById("debugOutput");
+      const originalLog = console.log;
+      const originalError = console.error;
+      const originalWarn = console.warn;
+
+      function addDebugLog(msg, color = "#0f0") {
+        const line = document.createElement("div");
+        line.style.color = color;
+        line.textContent = msg;
+        debugOutput.appendChild(line);
+        debugOutput.scrollTop = debugOutput.scrollHeight;
+        // Keep only last 100 lines
+        while (debugOutput.children.length > 100) {
+          debugOutput.removeChild(debugOutput.firstChild);
+        }
+      }
+
+      console.log = function (...args) {
+        originalLog.apply(console, args);
+        addDebugLog(args.join(" "), "#0f0");
+      };
+
+      console.error = function (...args) {
+        originalError.apply(console, args);
+        addDebugLog("ERROR: " + args.join(" "), "#f00");
+      };
+
+      console.warn = function (...args) {
+        originalWarn.apply(console, args);
+        addDebugLog("WARN: " + args.join(" "), "#ff0");
+      };
+
+      // Show debug console with Ctrl+Shift+D
+      document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key === "D") {
+          const debugConsole = document.getElementById("debugConsole");
+          debugConsole.style.display =
+            debugConsole.style.display === "none" ? "block" : "none";
+        }
+      });
+    </script>
+
+    <script src="script.js"></script>
+    <script src="broadcast.js"></script>
+  </body>
+</html>
